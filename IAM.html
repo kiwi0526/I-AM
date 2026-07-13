@@ -6,7 +6,6 @@
     <title>Life in Motion & Stillness | 퍼스널 브랜드</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Tailwind Custom Configuration -->
     <script>
         tailwind.config = {
             theme: {
@@ -19,7 +18,6 @@
                             accentHover: '#d97706', /* amber-600 */
                             muted: 'var(--text-muted)',
                         },
-                        /* Overriding Tailwind Slate colors dynamically based on CSS variables */
                         slate: {
                             950: 'var(--bg-primary)',
                             900: 'var(--bg-secondary)',
@@ -38,7 +36,7 @@
             }
         }
     </script>
-    <!-- Lucide Icons for beautiful icons -->
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
@@ -54,11 +52,11 @@
             --text-secondary: #cbd5e1; /* slate-300 */
             --text-muted: #94a3b8; /* slate-400 */
             --text-dim: #64748b; /* slate-500 */
-            --grid-color: #334155;
+            --grid-color: rgba(51, 65, 85, 0.3);
         }
 
         :root.light {
-            --bg-primary: #f8fafc; /* slate-50 */
+            --bg-primary: #f8fafc; /* slate-5 */
             --bg-secondary: #f1f5f9; /* slate-100 */
             --border-primary: #cbd5e1; /* slate-300 */
             --border-secondary: #94a3b8; /* slate-400 */
@@ -66,7 +64,7 @@
             --text-secondary: #334155; /* slate-700 */
             --text-muted: #475569; /* slate-600 */
             --text-dim: #64748b; /* slate-500 */
-            --grid-color: #cbd5e1;
+            --grid-color: rgba(203, 213, 225, 0.5);
         }
 
         body {
@@ -75,53 +73,97 @@
             color: var(--text-primary);
             word-break: keep-all;
             overflow-wrap: break-word;
-            -webkit-tap-highlight-color: transparent; /* Mobile tap highlight removal */
-            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+            transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Fluid transitions for theme switching */
+        /* Smooth UI transitions */
         header, section, div, p, span, a, h1, h2, h3, h4, h5, h6, button, input {
-            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, opacity 0.3s ease;
+            transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Overwrite Heading colors strictly in light mode */
         h1, h2, h3, h4, h5, h6 {
             color: var(--text-primary) !important;
         }
 
-        /* Light mode Hero gradient heading adjustment */
-        .light h1 {
-            background-image: linear-gradient(to right, #0f172a, #334155, #64748b) !important;
+        /* Ambient floating animations */
+        @keyframes float-slow {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-15px) scale(1.05); }
+        }
+        .animate-float {
+            animation: float-slow 8s ease-in-out infinite;
+        }
+        .animate-float-delayed {
+            animation: float-slow 12s ease-in-out infinite 2s;
+        }
+
+        /* Hero grid backdrop */
+        .hero-grid {
+            background-image: radial-gradient(var(--grid-color) 1.2px, transparent 1.2px);
+            background-size: 24px 24px;
         }
 
         /* Custom scrollbar */
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 8px;
         }
         ::-webkit-scrollbar-track {
             background: var(--bg-primary);
         }
         ::-webkit-scrollbar-thumb {
             background: var(--border-primary);
-            border-radius: 4px;
+            border-radius: 99px;
         }
         ::-webkit-scrollbar-thumb:hover {
             background: #f59e0b;
         }
 
-        /* Hero grid layout decoration */
-        .hero-grid {
-            background-image: radial-gradient(var(--grid-color) 1px, transparent 1px);
-            background-size: 16px 16px;
-        }
-
-        /* Reveal animation helper */
+        /* Reveal & Stagger Animation styles */
         .reveal {
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Staggered card delays */
+        .stagger-1 { transition-delay: 100ms; }
+        .stagger-2 { transition-delay: 200ms; }
+        .stagger-3 { transition-delay: 300ms; }
+
+        /* Glowing Border effect on cards */
+        .glowing-card {
+            position: relative;
+            overflow: hidden;
+        }
+        .glowing-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1.5px;
+            background: linear-gradient(to bottom right, transparent, transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            transition: background 0.4s ease;
+        }
+        .glowing-card:hover::before {
+            background: linear-gradient(to bottom right, #f59e0b, #10b981);
+        }
+
+        /* Text transition classes */
+        .fade-slide-text {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .fade-slide-text.active {
             opacity: 1;
             transform: translateY(0);
         }
@@ -132,81 +174,107 @@
     <!-- Header Navigation -->
     <header class="fixed top-0 left-0 w-full z-50 bg-brand-darker/80 backdrop-blur-md border-b border-slate-800/80">
         <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-            <a href="#" class="text-lg sm:text-xl font-bold tracking-wider text-brand-accent flex items-center gap-2">
-                <i data-lucide="compass" class="w-5 h-5 sm:w-6 sm:h-6"></i>
-                <span>EXPLORER.</span>
+            <a href="#" class="text-lg sm:text-xl font-bold tracking-wider text-brand-accent flex items-center gap-2 group">
+                <i data-lucide="compass" class="w-5 h-5 sm:w-6 sm:h-6 group-hover:rotate-45 transition-transform duration-500"></i>
+                <span data-lang="brand_title">EXPLORER.</span>
             </a>
+            
             <!-- Desktop Nav -->
             <nav class="hidden md:flex space-x-8 text-sm font-medium text-slate-300">
-                <a href="#about" class="hover:text-brand-accent transition-colors">소개</a>
-                <a href="#points" class="hover:text-brand-accent transition-colors">매력포인트</a>
-                <a href="#timeline" class="hover:text-brand-accent transition-colors">성장여정</a>
-                <a href="#taste" class="hover:text-brand-accent transition-colors">아카이브</a>
-                <a href="#gallery" class="hover:text-brand-accent transition-colors">갤러리</a>
+                <a href="#about" class="hover:text-brand-accent transition-colors relative group py-2">
+                    <span data-lang="nav_about">소개</span>
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-accent transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#points" class="hover:text-brand-accent transition-colors relative group py-2">
+                    <span data-lang="nav_points">매력포인트</span>
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-accent transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#timeline" class="hover:text-brand-accent transition-colors relative group py-2">
+                    <span data-lang="nav_timeline">성장여정</span>
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-accent transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#taste" class="hover:text-brand-accent transition-colors relative group py-2">
+                    <span data-lang="nav_taste">아카이브</span>
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-accent transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#gallery" class="hover:text-brand-accent transition-colors relative group py-2">
+                    <span data-lang="nav_gallery">갤러리</span>
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-accent transition-all duration-300 group-hover:w-full"></span>
+                </a>
             </nav>
+
             <div class="flex items-center gap-3">
+                <!-- Language Toggle Button -->
+                <button id="lang-toggle" class="p-2 text-slate-300 hover:text-brand-accent rounded-full border border-slate-800 hover:border-brand-accent/50 bg-slate-900/40 transition-all duration-300 flex items-center justify-center gap-1 min-w-[56px] min-h-[40px] text-xs font-bold" aria-label="언어 전환">
+                    <i data-lucide="globe" class="w-4 h-4"></i>
+                    <span id="lang-text">EN</span>
+                </button>
+
                 <!-- Theme Toggle Button -->
-                <button id="theme-toggle" class="p-2 text-slate-300 hover:text-brand-accent rounded-full border border-slate-800 hover:border-brand-accent/50 bg-slate-900/40 transition-colors flex items-center justify-center min-w-[40px] min-h-[40px]" aria-label="테마 전환">
+                <button id="theme-toggle" class="p-2 text-slate-300 hover:text-brand-accent rounded-full border border-slate-800 hover:border-brand-accent/50 bg-slate-900/40 transition-all duration-300 flex items-center justify-center min-w-[40px] min-h-[40px] hover:rotate-12" aria-label="테마 전환">
                     <span id="theme-icon-container" class="flex items-center justify-center">
                         <i data-lucide="sun" class="w-5 h-5"></i>
                     </span>
                 </button>
 
-                <a href="#contact" class="hidden sm:inline-block px-4 py-2 text-xs font-semibold text-slate-950 bg-brand-accent hover:bg-brand-accentHover rounded-full transition-all duration-300 transform hover:scale-105">
-                    대화 나누기
+                <a href="#contact" class="hidden sm:inline-block px-4 py-2 text-xs font-semibold text-slate-950 bg-brand-accent hover:bg-brand-accentHover rounded-full transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-brand-accent/20">
+                    <span data-lang="btn_contact">대화 나누기</span>
                 </a>
                 <!-- Mobile Menu Button -->
-                <button id="menu-btn" class="md:hidden p-2 text-slate-300 hover:text-brand-accent focus:outline-none" aria-label="메뉴 열기">
+                <button id="menu-btn" class="md:hidden p-2 text-slate-300 hover:text-brand-accent focus:outline-none transition-transform" aria-label="메뉴 열기">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
             </div>
         </div>
 
         <!-- Mobile Drawer Menu Overlay -->
-        <div id="mobile-menu" class="fixed inset-x-0 top-16 bg-brand-darker/95 backdrop-blur-xl border-b border-slate-800 z-40 hidden flex-col px-6 py-8 space-y-6 text-base font-semibold text-slate-300 shadow-2xl transition-all duration-300">
+        <div id="mobile-menu" class="fixed inset-x-0 top-16 bg-brand-darker/95 backdrop-blur-xl border-b border-slate-800 z-40 hidden flex-col px-6 py-8 space-y-6 text-base font-semibold text-slate-300 shadow-2xl">
             <a href="#about" class="mobile-link flex items-center gap-3 hover:text-brand-accent py-2 border-b border-slate-900">
-                <i data-lucide="user" class="w-5 h-5 text-brand-accent"></i>소개
+                <i data-lucide="user" class="w-5 h-5 text-brand-accent"></i><span data-lang="nav_about">소개</span>
             </a>
             <a href="#points" class="mobile-link flex items-center gap-3 hover:text-brand-accent py-2 border-b border-slate-900">
-                <i data-lucide="sparkles" class="w-5 h-5 text-brand-accent"></i>매력포인트
+                <i data-lucide="sparkles" class="w-5 h-5 text-brand-accent"></i><span data-lang="nav_points">매력포인트</span>
             </a>
             <a href="#timeline" class="mobile-link flex items-center gap-3 hover:text-brand-accent py-2 border-b border-slate-900">
-                <i data-lucide="milestone" class="w-5 h-5 text-brand-accent"></i>성장여정
+                <i data-lucide="milestone" class="w-5 h-5 text-brand-accent"></i><span data-lang="nav_timeline">성장여정</span>
             </a>
             <a href="#taste" class="mobile-link flex items-center gap-3 hover:text-brand-accent py-2 border-b border-slate-900">
-                <i data-lucide="bookmark" class="w-5 h-5 text-brand-accent"></i>아카이브
+                <i data-lucide="bookmark" class="w-5 h-5 text-brand-accent"></i><span data-lang="nav_taste">아카이브</span>
             </a>
             <a href="#gallery" class="mobile-link flex items-center gap-3 hover:text-brand-accent py-2 border-b border-slate-900">
-                <i data-lucide="image" class="w-5 h-5 text-brand-accent"></i>갤러리
+                <i data-lucide="image" class="w-5 h-5 text-brand-accent"></i><span data-lang="nav_gallery">갤러리</span>
             </a>
             <a href="#contact" class="mobile-link w-full py-3 text-center text-sm font-semibold text-slate-950 bg-brand-accent hover:bg-brand-accentHover rounded-lg transition-all duration-300">
-                대화 나누기
+                <span data-lang="btn_contact">대화 나누기</span>
             </a>
         </div>
     </header>
 
     <!-- 1. Hero Section -->
     <section id="hero" class="relative min-h-[90vh] sm:min-h-screen flex items-center justify-center px-6 pt-20 overflow-hidden">
-        <!-- Background Grid & Glow effect -->
-        <div class="absolute inset-0 hero-grid opacity-25"></div>
-        <div class="absolute top-1/4 left-1/4 w-72 h-72 sm:w-96 sm:h-96 bg-brand-accent/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute bottom-1/4 right-1/4 w-72 h-72 sm:w-96 sm:h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <!-- Interactive Background Glows (Parallax targets in JS) -->
+        <div class="absolute inset-0 hero-grid opacity-20 pointer-events-none"></div>
+        <div id="glow-1" class="absolute top-1/4 left-1/4 w-72 h-72 sm:w-96 sm:h-96 bg-brand-accent/10 rounded-full blur-3xl pointer-events-none animate-float"></div>
+        <div id="glow-2" class="absolute bottom-1/4 right-1/4 w-72 h-72 sm:w-96 sm:h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none animate-float-delayed"></div>
 
         <div class="text-center max-w-3xl z-10 space-y-5 sm:space-y-6">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-slate-700 bg-slate-800/40 text-[10px] sm:text-xs text-brand-accent tracking-wide mb-2 animate-pulse">
                 <i data-lucide="sparkles" class="w-3 sm:w-3.5 h-3 sm:h-3.5"></i>
-                <span>Life in Motion & Stillness</span>
+                <span data-lang="hero_badge">Life in Motion & Stillness</span>
             </div>
-            <h1 class="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-slate-400">
-                뜨겁게 달리고,<br class="block sm:hidden"> 깊게 음미합니다.
+            
+            <!-- Dual Changing Title to give dynamic life -->
+            <h1 class="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-slate-400 min-h-[110px] sm:min-h-[150px] flex flex-col justify-center items-center">
+                <span id="hero-title-motion" class="fade-slide-text active">뜨겁게 달리고,</span>
+                <span id="hero-title-stillness" class="fade-slide-text active text-brand-accent">깊게 음미합니다.</span>
             </h1>
-            <p class="text-base sm:text-lg md:text-xl text-brand-muted max-w-xl mx-auto font-light leading-relaxed px-2">
-                세상을 탐색하는 역동적인 에너지와,<br>
-                나만의 시간을 채우는 밀도 높은 취향을 가진 탐험가의 기록입니다.
+            
+            <p class="text-base sm:text-lg md:text-xl text-brand-muted max-w-xl mx-auto font-light leading-relaxed px-2" data-lang="hero_description">
+                세상을 탐색하는 역동적인 에너지와,<br>나만의 시간을 채우는 밀도 높은 취향을 가진 탐험가의 기록입니다.
             </p>
             <div class="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4 px-4 w-full sm:w-auto">
-                <a href="#about" class="w-full sm:w-auto px-6 py-3.5 sm:px-8 sm:py-4 bg-slate-800 hover:bg-slate-700 text-slate-100 rounded-lg font-medium transition-all duration-300 border border-slate-700 flex items-center justify-center gap-2 group text-sm sm:text-base">
-                    <span>여정 살펴보기</span>
+                <a href="#about" class="w-full sm:w-auto px-6 py-3.5 sm:px-8 sm:py-4 bg-slate-800 hover:bg-slate-700 text-slate-100 rounded-lg font-medium transition-all duration-300 border border-slate-700 flex items-center justify-center gap-2 group text-sm sm:text-base shadow-lg hover:shadow-slate-800/40">
+                    <span data-lang="hero_cta">여정 살펴보기</span>
                     <i data-lucide="arrow-down" class="w-4 h-4 group-hover:translate-y-1 transition-transform"></i>
                 </a>
             </div>
@@ -225,33 +293,32 @@
     <section id="about" class="py-16 sm:py-24 px-6 max-w-6xl mx-auto reveal">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
             <div class="md:col-span-5 relative order-2 md:order-1">
-                <div class="aspect-square w-full max-w-[320px] sm:max-w-none mx-auto rounded-2xl bg-gradient-to-tr from-brand-accent to-emerald-500 p-[1px] shadow-2xl">
+                <div class="aspect-square w-full max-w-[320px] sm:max-w-none mx-auto rounded-2xl bg-gradient-to-tr from-brand-accent to-emerald-500 p-[1.5px] shadow-2xl hover:rotate-2 transition-transform duration-500">
                     <div class="w-full h-full bg-brand-dark rounded-2xl overflow-hidden relative flex flex-col justify-end p-6 sm:p-8">
                         <div class="absolute inset-0 bg-gradient-to-t from-brand-darker via-brand-darker/40 to-transparent z-10"></div>
-                        <!-- Decorative visual -->
                         <div class="absolute inset-0 flex items-center justify-center opacity-10">
-                            <i data-lucide="compass" class="w-48 h-48 sm:w-64 sm:h-64 text-slate-100 animate-spin-slow"></i>
+                            <i data-lucide="compass" class="w-48 h-48 sm:w-64 sm:h-64 text-slate-100 animate-spin" style="animation-duration: 20s;"></i>
                         </div>
                         <div class="z-20">
-                            <span class="text-[10px] sm:text-xs text-brand-accent font-bold uppercase tracking-widest">Active Explorer</span>
-                            <h3 class="text-xl sm:text-2xl font-bold text-slate-100 mt-1">움직임과 머무름의 기록</h3>
-                            <p class="text-xs sm:text-sm text-brand-muted mt-2">유년기 넓은 세계를 향한 탐색에서 시작해, 이제는 나만의 단단한 취향을 수집해나갑니다.</p>
+                            <span class="text-[10px] sm:text-xs text-brand-accent font-bold uppercase tracking-widest" data-lang="about_badge">Active Explorer</span>
+                            <h3 class="text-xl sm:text-2xl font-bold text-slate-100 mt-1" data-lang="about_pic_title">움직임과 머무름의 기록</h3>
+                            <p class="text-xs sm:text-sm text-brand-muted mt-2" data-lang="about_pic_desc">유년기 넓은 세계를 향한 탐색에서 시작해, 이제는 나만의 단단한 취향을 수집해나갑니다.</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="md:col-span-7 space-y-4 sm:space-y-6 order-1 md:order-2">
-                <h2 class="text-xs font-bold text-brand-accent uppercase tracking-widest">About Me</h2>
-                <h3 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-100 leading-tight">
+                <h2 class="text-xs font-bold text-brand-accent uppercase tracking-widest" data-lang="about_small_title">About Me</h2>
+                <h3 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-100 leading-tight" data-lang="about_title">
                     "경계 없는 확장"과 <br class="hidden sm:block"><span class="text-brand-accent">"밀도 높은 몰입"</span>이라는 두 개의 축
                 </h3>
-                <p class="text-slate-300 leading-relaxed text-sm sm:text-base md:text-lg">
+                <p class="text-slate-300 leading-relaxed text-sm sm:text-base md:text-lg" data-lang="about_desc">
                     안녕하세요! 저는 새로운 세계를 경험하고 수집하는 일을 사랑하는 사람입니다. 
                     유년기 글로벌한 낯선 공기에서 기른 호기심은 학창 시절 스포츠라는 뜨거운 에너지로 번졌고, 
                     성인이 되어서는 스스로를 통제하는 육체 훈련과 깊이 있는 감각적 사색으로 다듬어졌습니다.
                 </p>
-                <div class="p-5 sm:p-6 rounded-xl bg-slate-900 border border-slate-800">
-                    <p class="italic text-slate-400 text-xs sm:text-sm leading-relaxed">
+                <div class="p-5 sm:p-6 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 shadow-lg">
+                    <p class="italic text-slate-400 text-xs sm:text-sm leading-relaxed" data-lang="about_quote">
                         "처음엔 몸으로 부딪쳐 세계를 넓혀갔고, 이제는 한 잔의 위스키, 한 잔의 에스프레소처럼 
                         밀도 높은 순간을 깊이 음미하는 여유를 사랑합니다."
                     </p>
@@ -264,41 +331,41 @@
     <section id="points" class="py-16 sm:py-24 bg-brand-dark border-y border-slate-800/50 reveal">
         <div class="max-w-6xl mx-auto px-6">
             <div class="text-center max-w-2xl mx-auto mb-12 sm:mb-16 space-y-3 sm:space-y-4">
-                <h2 class="text-xs font-bold text-brand-accent uppercase tracking-widest">Core Values</h2>
-                <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-100">나를 정의하는 3가지 키워드</h3>
-                <p class="text-brand-muted text-xs sm:text-sm">저라는 사람의 생각과 라이프스타일을 이루는 핵심 축들입니다.</p>
+                <h2 class="text-xs font-bold text-brand-accent uppercase tracking-widest" data-lang="points_small_title">Core Values</h2>
+                <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-100" data-lang="points_title">나를 정의하는 3가지 키워드</h3>
+                <p class="text-brand-muted text-xs sm:text-sm" data-lang="points_desc">저라는 사람의 생각과 라이프스타일을 이루는 핵심 축들입니다.</p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
                 <!-- Card 1: Energy -->
-                <div class="bg-brand-darker p-6 sm:p-8 rounded-2xl border border-slate-800 hover:border-brand-accent/50 transition-all duration-300 group">
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-amber-500/10 flex items-center justify-center text-brand-accent mb-4 sm:mb-6 group-hover:scale-110 transition-transform">
-                        <i data-lucide="zap" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                <div class="bg-brand-darker p-6 sm:p-8 rounded-2xl border border-slate-800 hover:border-brand-accent/30 transition-all duration-300 glowing-card reveal stagger-1 group">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-amber-500/10 flex items-center justify-center text-brand-accent mb-4 sm:mb-6 group-hover:scale-110 group-hover:bg-amber-500/20 transition-all">
+                        <i data-lucide="zap" class="w-5 h-5 sm:w-6 sm:h-6 animate-pulse"></i>
                     </div>
-                    <h4 class="text-lg sm:text-xl font-bold text-slate-100 mb-2 sm:mb-3">무한한 에너지 (Active)</h4>
-                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                    <h4 class="text-lg sm:text-xl font-bold text-slate-100 mb-2 sm:mb-3" data-lang="points_c1_title">무한한 에너지 (Active)</h4>
+                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed" data-lang="points_c1_desc">
                         축구, 테니스, 권투 등 다양한 역동적인 취미를 섭렵했습니다. 언제나 새로운 도전 앞에서 물러서지 않고 먼저 몸을 던질 줄 아는 능동성을 지니고 있습니다.
                     </p>
                 </div>
 
                 <!-- Card 2: Persistence -->
-                <div class="bg-brand-darker p-6 sm:p-8 rounded-2xl border border-slate-800 hover:border-emerald-500/50 transition-all duration-300 group">
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-4 sm:mb-6 group-hover:scale-110 transition-transform">
+                <div class="bg-brand-darker p-6 sm:p-8 rounded-2xl border border-slate-800 hover:border-emerald-500/30 transition-all duration-300 glowing-card reveal stagger-2 group">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-4 sm:mb-6 group-hover:scale-110 group-hover:bg-emerald-500/20 transition-all">
                         <i data-lucide="dumbbell" class="w-5 h-5 sm:w-6 sm:h-6"></i>
                     </div>
-                    <h4 class="text-lg sm:text-xl font-bold text-slate-100 mb-2 sm:mb-3">단단한 끈기 (Disciplined)</h4>
-                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
-                        군 시절부터 혹혹하게 훈련했던 웨이트 트레이닝처럼, 스스로 정한 한계를 돌파하기 위해 하루하루 꾸준히 몸과 마음의 근육을 다듬는 성실함이 있습니다.
+                    <h4 class="text-lg sm:text-xl font-bold text-slate-100 mb-2 sm:mb-3" data-lang="points_c2_title">단단한 끈기 (Disciplined)</h4>
+                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed" data-lang="points_c2_desc">
+                        군 시절부터 혹독하게 훈련했던 웨이트 트레이닝처럼, 스스로 정한 한계를 돌파하기 위해 하루하루 꾸준히 몸과 마음의 근육을 다듬는 성실함이 있습니다.
                     </p>
                 </div>
 
                 <!-- Card 3: Taste -->
-                <div class="bg-brand-darker p-6 sm:p-8 rounded-2xl border border-slate-800 hover:border-blue-500/50 transition-all duration-300 group sm:col-span-2 md:col-span-1">
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 mb-4 sm:mb-6 group-hover:scale-110 transition-transform">
+                <div class="bg-brand-darker p-6 sm:p-8 rounded-2xl border border-slate-800 hover:border-blue-500/30 transition-all duration-300 glowing-card reveal stagger-3 group sm:col-span-2 md:col-span-1">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 mb-4 sm:mb-6 group-hover:scale-110 group-hover:bg-blue-500/20 transition-all">
                         <i data-lucide="wine" class="w-5 h-5 sm:w-6 sm:h-6"></i>
                     </div>
-                    <h4 class="text-lg sm:text-xl font-bold text-slate-100 mb-2 sm:mb-3">섬세한 취향 (Refined)</h4>
-                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                    <h4 class="text-lg sm:text-xl font-bold text-slate-100 mb-2 sm:mb-3" data-lang="points_c3_title">섬세한 취향 (Refined)</h4>
+                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed" data-lang="points_c3_desc">
                         격렬하게 땀 흘린 후 마시는 아늑한 바의 위스키 한 잔, 꼼꼼하게 원두를 로스팅하는 카페에서의 시간을 아낍니다. 일상의 자그마한 디테일에 깊이를 불어넣습니다.
                     </p>
                 </div>
@@ -309,60 +376,66 @@
     <!-- 4. Chronological Timeline Section -->
     <section id="timeline" class="py-16 sm:py-24 max-w-4xl mx-auto px-6 reveal">
         <div class="text-center mb-12 sm:mb-16 space-y-3 sm:space-y-4">
-            <h2 class="text-xs font-bold text-brand-accent uppercase tracking-widest">The Odyssey</h2>
-            <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-100">어떻게 나의 세계가 확장되어 왔을까?</h3>
-            <p class="text-brand-muted text-xs sm:text-sm">유년기부터 지금까지의 취미 변천사와 가치관의 형성 과정입니다.</p>
+            <h2 class="text-xs font-bold text-brand-accent uppercase tracking-widest" data-lang="timeline_small_title">The Odyssey</h2>
+            <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-100" data-lang="timeline_title">어떻게 나의 세계가 확장되어 왔을까?</h3>
+            <p class="text-brand-muted text-xs sm:text-sm" data-lang="timeline_desc">유년기부터 지금까지의 취미 변천사와 가치관의 형성 과정입니다.</p>
         </div>
 
-        <div class="relative border-l-2 border-slate-800 ml-2 md:ml-32 space-y-8 sm:space-y-12">
+        <div class="relative ml-2 md:ml-32 space-y-8 sm:space-y-12">
+            <!-- Timeline Line Indicator Container -->
+            <div class="absolute left-[-2px] md:left-[-2px] top-2 bottom-2 w-[3px] bg-slate-800">
+                <!-- Grow dynamically on scroll via JS -->
+                <div id="timeline-progress-bar" class="w-full h-0 bg-gradient-to-b from-brand-accent to-emerald-500 rounded-full transition-all duration-300"></div>
+            </div>
+
             <!-- Timeline Item 1 -->
-            <div class="relative pl-6 sm:pl-10 md:pl-12 group">
-                <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-brand-darker border-4 border-brand-accent group-hover:scale-125 transition-transform"></div>
-                <span class="absolute left-[-110px] top-1 hidden md:block text-xs font-bold text-brand-muted tracking-wider text-right w-24">유년기</span>
-                <div class="bg-slate-900/60 p-5 sm:p-6 rounded-xl border border-slate-800 hover:border-slate-700 transition-colors">
-                    <span class="text-[10px] font-bold text-brand-accent block md:hidden mb-1.5">유년기</span>
-                    <h4 class="text-base sm:text-lg font-bold text-slate-100 mb-2">낯선 공기, 넓은 세계와의 첫 만남</h4>
-                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
-                        방송국에 근무하셨던 아버지 덕분에 어릴 때부터 여러 나라를 탐험했습니다. 언어와 피부색이 다른 낯선 외국인들과 서스럼없이 어울렸던 경험은 어린 제게 ‘세상은 무한한 가능성의 공간’이라는 열린 시야를 선물해주었습니다.
+            <div class="relative pl-6 sm:pl-10 md:pl-12 group reveal">
+                <div class="absolute -left-[10px] top-1.5 w-4 h-4 rounded-full bg-brand-darker border-4 border-brand-accent group-hover:scale-125 transition-transform duration-300"></div>
+                <span class="absolute left-[-110px] top-1 hidden md:block text-xs font-bold text-brand-muted tracking-wider text-right w-24" data-lang="time_era_1">유년기</span>
+                <div class="bg-slate-900/60 p-5 sm:p-6 rounded-xl border border-slate-800 hover:border-slate-700 transition-colors shadow-md">
+                    <span class="text-[10px] font-bold text-brand-accent block md:hidden mb-1.5" data-lang="time_era_1">유년기</span>
+                    <h4 class="text-base sm:text-lg font-bold text-slate-100 mb-2" data-lang="timeline_i1_title">낯선 공기, 넓은 세계와의 첫 만남</h4>
+                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed" data-lang="timeline_i1_desc">
+                        방송국에 근무하셨던 아버지 덕분에 어릴 때부터 여러 나라를 탐험했습니다. 언어와 피부색이 다른 낯선 외국인들과 서슴지 않고 어울렸던 경험은 어린 제게 ‘세상은 무한한 가능성의 공간’이라는 열린 시야를 선물해주었습니다.
                     </p>
                 </div>
             </div>
 
             <!-- Timeline Item 2 -->
-            <div class="relative pl-6 sm:pl-10 md:pl-12 group">
-                <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-brand-darker border-4 border-brand-accent group-hover:scale-125 transition-transform"></div>
-                <span class="absolute left-[-110px] top-1 hidden md:block text-xs font-bold text-brand-muted tracking-wider text-right w-24">학창 시절</span>
-                <div class="bg-slate-900/60 p-5 sm:p-6 rounded-xl border border-slate-800 hover:border-slate-700 transition-colors">
-                    <span class="text-[10px] font-bold text-brand-accent block md:hidden mb-1.5">학창 시절</span>
-                    <h4 class="text-base sm:text-lg font-bold text-slate-100 mb-2">꿈의 구장을 질주하던 소년</h4>
-                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+            <div class="relative pl-6 sm:pl-10 md:pl-12 group reveal">
+                <div class="absolute -left-[10px] top-1.5 w-4 h-4 rounded-full bg-brand-darker border-4 border-brand-accent group-hover:scale-125 transition-transform duration-300"></div>
+                <span class="absolute left-[-110px] top-1 hidden md:block text-xs font-bold text-brand-muted tracking-wider text-right w-24" data-lang="time_era_2">학창 시절</span>
+                <div class="bg-slate-900/60 p-5 sm:p-6 rounded-xl border border-slate-800 hover:border-slate-700 transition-colors shadow-md">
+                    <span class="text-[10px] font-bold text-brand-accent block md:hidden mb-1.5" data-lang="time_era_2">학창 시절</span>
+                    <h4 class="text-base sm:text-lg font-bold text-slate-100 mb-2" data-lang="timeline_i2_title">꿈의 구장을 질주하던 소년</h4>
+                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed" data-lang="timeline_i2_desc">
                         맨체스터 유나이티드의 전성기(호날두, 루니, 박지성)를 보며 열광했습니다. 마침내 영국의 올드 트래포드(Old Trafford) 구장을 직접 방문해 동경하던 선수들의 발자취가 남은 꿈의 그라운드를 눈앞에서 마주했을 때의 뜨거운 전율은 지금도 제 마음속 열정의 불꽃입니다.
                     </p>
                 </div>
             </div>
 
             <!-- Timeline Item 3 -->
-            <div class="relative pl-6 sm:pl-10 md:pl-12 group">
-                <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-brand-darker border-4 border-brand-accent group-hover:scale-125 transition-transform"></div>
-                <span class="absolute left-[-110px] top-1 hidden md:block text-xs font-bold text-brand-muted tracking-wider text-right w-24">청년기 (군 입대)</span>
-                <div class="bg-slate-900/60 p-5 sm:p-6 rounded-xl border border-slate-800 hover:border-slate-700 transition-colors">
-                    <span class="text-[10px] font-bold text-brand-accent block md:hidden mb-1.5">청년기 (군 입대)</span>
-                    <h4 class="text-base sm:text-lg font-bold text-slate-100 mb-2">나를 온전히 짓고 단련하는 법 (헬스)</h4>
-                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+            <div class="relative pl-6 sm:pl-10 md:pl-12 group reveal">
+                <div class="absolute -left-[10px] top-1.5 w-4 h-4 rounded-full bg-brand-darker border-4 border-brand-accent group-hover:scale-125 transition-transform duration-300"></div>
+                <span class="absolute left-[-110px] top-1 hidden md:block text-xs font-bold text-brand-muted tracking-wider text-right w-24" data-lang="time_era_3">청년기 (군대)</span>
+                <div class="bg-slate-900/60 p-5 sm:p-6 rounded-xl border border-slate-800 hover:border-slate-700 transition-colors shadow-md">
+                    <span class="text-[10px] font-bold text-brand-accent block md:hidden mb-1.5" data-lang="time_era_3">청년기 (군대)</span>
+                    <h4 class="text-base sm:text-lg font-bold text-slate-100 mb-2" data-lang="timeline_i3_title">나를 온전히 짓고 단련하는 법 (헬스)</h4>
+                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed" data-lang="timeline_i3_desc">
                         군대에서 트레이너 동료들과 자극을 나누며 무아지경으로 쇳덩이를 들었습니다. 소위 '헬창'이라 불릴 만큼 끝까지 나를 혹독하게 밀어붙였던 이 시기는 단단한 마음의 성벽을 다진 시간입니다.
                     </p>
                 </div>
             </div>
 
             <!-- Timeline Item 4 -->
-            <div class="relative pl-6 sm:pl-10 md:pl-12 group">
-                <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-brand-darker border-4 border-brand-accent group-hover:scale-125 transition-transform"></div>
-                <span class="absolute left-[-110px] top-1 hidden md:block text-xs font-bold text-brand-muted tracking-wider text-right w-24">대학 & 현재</span>
-                <div class="bg-slate-900/60 p-5 sm:p-6 rounded-xl border border-slate-800 hover:border-slate-700 transition-colors">
-                    <span class="text-[10px] font-bold text-brand-accent block md:hidden mb-1.5">대학 & 현재</span>
-                    <h4 class="text-base sm:text-lg font-bold text-slate-100 mb-2">다채로운 취미의 융합과 음미</h4>
-                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
-                        웨이트 트레이닝 외에도 테니스, 권투 같은 역동적인 구기 및 무도 스포츠로 신체 균형을 넓혔습니다. 운동 후에는 분위기 있는 바에서 위스키 한 잔을 나누거나, 훌륭한 카페에서 커피의 향미를 분석하고, 미술 전시회를 통해 신선한 영감을 채웁니다.
+            <div class="relative pl-6 sm:pl-10 md:pl-12 group reveal">
+                <div class="absolute -left-[10px] top-1.5 w-4 h-4 rounded-full bg-brand-darker border-4 border-brand-accent group-hover:scale-125 transition-transform duration-300"></div>
+                <span class="absolute left-[-110px] top-1 hidden md:block text-xs font-bold text-brand-muted tracking-wider text-right w-24" data-lang="time_era_4">대학 & 현재</span>
+                <div class="bg-slate-900/60 p-5 sm:p-6 rounded-xl border border-slate-800 hover:border-slate-700 transition-colors shadow-md">
+                    <span class="text-[10px] font-bold text-brand-accent block md:hidden mb-1.5" data-lang="time_era_4">대학 & 현재</span>
+                    <h4 class="text-base sm:text-lg font-bold text-slate-100 mb-2" data-lang="timeline_i4_title">다채로운 취미의 융합과 음미</h4>
+                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed" data-lang="timeline_i4_desc">
+                        웨이트 트레이닝 외에도 테니스, 권투 같은 역동적인 종합 스포츠로 신체 균형을 넓혔습니다. 운동 후에는 분위기 있는 바에서 위스키를 마시거나, 훌륭한 카페에서 로스팅 향미를 분석하고, 미술 전시회를 관람하며 감각을 채우는 섬세한 라이프스타일을 사랑하게 되었습니다.
                     </p>
                 </div>
             </div>
@@ -373,14 +446,14 @@
     <section id="taste" class="py-16 sm:py-24 bg-brand-dark border-t border-slate-800/50 reveal">
         <div class="max-w-6xl mx-auto px-6">
             <div class="text-center max-w-2xl mx-auto mb-10 space-y-3">
-                <h2 class="text-xs font-bold text-brand-accent uppercase tracking-widest">Taste Card</h2>
-                <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-100">현재 나의 라이프스타일 취향 카드</h3>
-                <p class="text-brand-muted text-xs sm:text-sm">처음 만났을 때 가벼운 대화의 물꼬를 터줄 대화의 아일랜드입니다.</p>
+                <h2 class="text-xs font-bold text-brand-accent uppercase tracking-widest" data-lang="taste_small_title">Taste Card</h2>
+                <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-100" data-lang="taste_title">현재 나의 라이프스타일 취향 카드</h3>
+                <p class="text-brand-muted text-xs sm:text-sm" data-lang="taste_desc">처음 만났을 때 가벼운 대화의 물꼬를 터줄 대화의 아일랜드입니다.</p>
             </div>
 
             <!-- Filter Tabs -->
             <div class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10">
-                <button onclick="filterTaste('all')" id="tab-all" class="taste-tab px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs font-bold border transition-all duration-300 bg-brand-accent text-slate-950 border-brand-accent min-h-[40px]">
+                <button onclick="filterTaste('all')" id="tab-all" class="taste-tab px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs font-bold border transition-all duration-300 bg-brand-accent text-slate-950 border-brand-accent min-h-[40px] shadow-sm">
                     전체보기
                 </button>
                 <button onclick="filterTaste('sports')" id="tab-sports" class="taste-tab px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs font-bold border border-slate-700 text-slate-300 hover:text-white hover:border-slate-500 transition-all duration-300 min-h-[40px]">
@@ -400,70 +473,70 @@
             <!-- Taste Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8" id="taste-grid">
                 <!-- Card: Sports 1 -->
-                <div class="taste-item sports bg-slate-900 border border-slate-800 p-5 sm:p-6 rounded-2xl transition-all duration-300">
-                    <span class="text-[10px] uppercase tracking-wider text-emerald-400 font-bold">Sports / Active</span>
+                <div class="taste-item sports bg-slate-900 border border-slate-800 p-5 sm:p-6 rounded-2xl shadow-lg transition-all duration-500 hover:-translate-y-1 hover:border-emerald-500/30">
+                    <span class="text-[10px] uppercase tracking-wider text-emerald-400 font-bold" data-lang="taste_c1_badge">Sports / Active</span>
                     <h4 class="text-lg sm:text-xl font-bold text-slate-100 mt-1.5 mb-2.5 flex items-center gap-2">
-                        <span>테니스 & 권투</span>
+                        <span data-lang="taste_c1_title">테니스 & 권투</span>
                         <i data-lucide="award" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i>
                     </h4>
-                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
+                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4" data-lang="taste_c1_desc">
                         테니스의 코트를 가르는 경쾌함과 권투의 심장이 터질 것 같은 밀도 높은 스트레스 해소를 함께 즐깁니다.
                     </p>
                     <div class="flex flex-wrap gap-1.5">
-                        <span class="px-2.5 py-1 bg-slate-800 text-[9px] sm:text-[10px] text-slate-300 rounded">순발력</span>
-                        <span class="px-2.5 py-1 bg-slate-800 text-[9px] sm:text-[10px] text-slate-300 rounded">포핸드</span>
-                        <span class="px-2.5 py-1 bg-slate-800 text-[9px] sm:text-[10px] text-slate-300 rounded">유산소 끝판왕</span>
+                        <span class="px-2.5 py-1 bg-slate-800 text-[9px] sm:text-[10px] text-slate-300 rounded" data-lang="taste_c1_t1">순발력</span>
+                        <span class="px-2.5 py-1 bg-slate-800 text-[9px] sm:text-[10px] text-slate-300 rounded" data-lang="taste_c1_t2">포핸드</span>
+                        <span class="px-2.5 py-1 bg-slate-800 text-[9px] sm:text-[10px] text-slate-300 rounded" data-lang="taste_c1_t3">유산소 끝판왕</span>
                     </div>
                 </div>
 
                 <!-- Card: Whiskey 1 (Kavalan) -->
-                <div class="taste-item whiskey bg-slate-900 border border-slate-800 p-5 sm:p-6 rounded-2xl transition-all duration-300">
-                    <span class="text-[10px] uppercase tracking-wider text-brand-accent font-bold">Whiskey / Taste</span>
+                <div class="taste-item whiskey bg-slate-900 border border-slate-800 p-5 sm:p-6 rounded-2xl shadow-lg transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/30">
+                    <span class="text-[10px] uppercase tracking-wider text-brand-accent font-bold" data-lang="taste_c2_badge">Whiskey / Taste</span>
                     <h4 class="text-lg sm:text-xl font-bold text-slate-100 mt-1.5 mb-2.5 flex items-center gap-2">
-                        <span>카발란 한잔 (Kavalan)</span>
+                        <span data-lang="taste_c2_title">카발란 한잔 (Kavalan)</span>
                         <i data-lucide="wine" class="w-4 h-4 sm:w-5 sm:h-5 text-brand-accent"></i>
                     </h4>
-                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
+                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4" data-lang="taste_c2_desc">
                         대만의 고온다습한 기후가 빚어낸 농밀한 아열대 과일 향과 짙은 오크의 풍미, 카발란 솔리스트 쉐리를 깊이 음미합니다.
                     </p>
                     <div class="flex flex-wrap gap-1.5">
-                        <span class="px-2.5 py-1 bg-slate-800 text-[9px] sm:text-[10px] text-slate-300 rounded">카발란</span>
-                        <span class="px-2.5 py-1 bg-slate-800 text-[9px] sm:text-[10px] text-slate-300 rounded">싱글몰트</span>
-                        <span class="px-2.5 py-1 bg-slate-800 text-[9px] sm:text-[10px] text-slate-300 rounded">쉐리 캐스크</span>
+                        <span class="px-2.5 py-1 bg-slate-800 text-[9px] sm:text-[10px] text-slate-300 rounded" data-lang="taste_c2_t1">카발란</span>
+                        <span class="px-2.5 py-1 bg-slate-800 text-[9px] sm:text-[10px] text-slate-300 rounded" data-lang="taste_c2_t2">싱글몰트</span>
+                        <span class="px-2.5 py-1 bg-slate-800 text-[9px] sm:text-[10px] text-slate-300 rounded" data-lang="taste_c2_t3">쉐리 캐스크</span>
                     </div>
                 </div>
 
                 <!-- Card: Coffee 1 -->
-                <div class="taste-item coffee bg-slate-900 border border-slate-800 p-5 sm:p-6 rounded-2xl transition-all duration-300">
-                    <span class="text-[10px] uppercase tracking-wider text-blue-400 font-bold">Coffee / Sensory</span>
+                <div class="taste-item coffee bg-slate-900 border border-slate-800 p-5 sm:p-6 rounded-2xl shadow-lg transition-all duration-500 hover:-translate-y-1 hover:border-blue-500/30">
+                    <span class="text-[10px] uppercase tracking-wider text-blue-400 font-bold" data-lang="taste_c3_badge">Coffee / Sensory</span>
                     <h4 class="text-lg sm:text-xl font-bold text-slate-100 mt-1.5 mb-2.5 flex items-center gap-2">
-                        <span>스페셜티 드립 커피</span>
+                        <span data-lang="taste_c3_title">스페셜티 드립 커피</span>
                         <i data-lucide="cup-soda" class="w-4 h-4 sm:w-5 sm:h-5 text-blue-400"></i>
                     </h4>
-                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
+                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4" data-lang="taste_c3_desc">
                         산뜻한 약배전 원두에서 느껴지는 열대과일과 꽃향기에 매료됩니다. 로스터의 장인 정신을 느끼는 것을 환영합니다.
                     </p>
                     <div class="flex flex-wrap gap-1.5">
-                        <span class="px-2.5 py-1 bg-slate-800 text-[9px] sm:text-[10px] text-slate-300 rounded">약배전</span>
-                        <span class="px-2.5 py-1 bg-slate-800 text-[9px] sm:text-[10px] text-slate-300 rounded">에티오피아</span>
-                        <span class="px-2.5 py-1 bg-slate-800 text-[9px] sm:text-[10px] text-slate-300 rounded">직접 내리는 아침</span>
+                        <span class="px-2.5 py-1 bg-slate-800 text-[9px] sm:text-[10px] text-slate-300 rounded" data-lang="taste_c3_t1">약배전</span>
+                        <span class="px-2.5 py-1 bg-slate-800 text-[9px] sm:text-[10px] text-slate-300 rounded" data-lang="taste_c3_t2">에티오피아</span>
+                        <span class="px-2.5 py-1 bg-slate-800 text-[9px] sm:text-[10px] text-slate-300 rounded" data-lang="taste_c3_t3">직접 내리는 아침</span>
                     </div>
                 </div>
 
                 <!-- Card: Exhibition 1 -->
-                <div class="taste-item exhibition bg-slate-900 border border-slate-800 p-5 sm:p-6 rounded-2xl transition-all duration-300">
-                    <span class="text-[10px] uppercase tracking-wider text-purple-400 font-bold">Art / Culture</span>
+                <div class="taste-item exhibition bg-slate-900 border border-slate-800 p-5 sm:p-6 rounded-2xl shadow-lg transition-all duration-500 hover:-translate-y-1 hover:border-purple-500/30">
+                    <span class="text-[10px] uppercase tracking-wider text-purple-400 font-bold" data-lang="taste_c4_badge">Art / Culture</span>
                     <h4 class="text-lg sm:text-xl font-bold text-slate-100 mt-1.5 mb-2.5 flex items-center gap-2">
-                        <span>미술 및 미디어 전시</span>
+                        <span data-lang="taste_c4_title">미술 및 미디어 전시</span>
                         <i data-lucide="palette" class="w-4 h-4 sm:w-5 sm:h-5 text-purple-400"></i>
                     </h4>
-                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
+                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4" data-lang="taste_c4_desc">
                         공간 전체를 채우는 현대미술이나 몰입형 미디어 아트를 보며 일상의 바쁜 숨을 고르고, 새로운 영감의 스파크를 얻습니다.
                     </p>
                     <div class="flex flex-wrap gap-1.5">
-                        <span class="px-2.5 py-1 bg-slate-800 text-[9px] sm:text-[10px] text-slate-300 rounded">현대미술</span>
-                        <span class="px-2.5 py-1 bg-slate-800 text-[9px] sm:text-[10px] text-slate-300 rounded">미디어아트</span>
-                        <span class="px-2.5 py-1 bg-slate-800 text-[9px] sm:text-[10px] text-slate-300 rounded">영감 수집</span>
+                        <span class="px-2.5 py-1 bg-slate-800 text-[9px] sm:text-[10px] text-slate-300 rounded" data-lang="taste_c4_t1">현대미술</span>
+                        <span class="px-2.5 py-1 bg-slate-800 text-[9px] sm:text-[10px] text-slate-300 rounded" data-lang="taste_c4_t2">미디어아트</span>
+                        <span class="px-2.5 py-1 bg-slate-800 text-[9px] sm:text-[10px] text-slate-300 rounded" data-lang="taste_c4_t3">영감 수집</span>
                     </div>
                 </div>
             </div>
@@ -474,70 +547,70 @@
     <section id="gallery" class="py-16 sm:py-24 reveal">
         <div class="max-w-6xl mx-auto px-6">
             <div class="text-center max-w-2xl mx-auto mb-12 space-y-3">
-                <h2 class="text-xs font-bold text-brand-accent uppercase tracking-widest">Visual Diary</h2>
-                <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-100">순간의 흔적들</h3>
-                <p class="text-brand-muted text-xs sm:text-sm">기록이 수집되어 삶의 입체를 채워갑니다.</p>
+                <h2 class="text-xs font-bold text-brand-accent uppercase tracking-widest" data-lang="gallery_small_title">Visual Diary</h2>
+                <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-100" data-lang="gallery_title">순간의 흔적들</h3>
+                <p class="text-brand-muted text-xs sm:text-sm" data-lang="gallery_desc">기록이 수집되어 삶의 입체를 채워갑니다.</p>
             </div>
 
-            <!-- Beautiful Images -->
+            <!-- Image Grid -->
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                 <!-- Img 1 -->
-                <div class="group relative overflow-hidden rounded-xl bg-slate-800 aspect-[4/3] border border-slate-700">
-                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&auto=format&fit=crop&q=80" alt="Travel" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-70 group-hover:opacity-100">
+                <div class="group relative overflow-hidden rounded-xl bg-slate-800 aspect-[4/3] border border-slate-700 hover:border-brand-accent/50 transition-all duration-300 shadow-md">
+                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&auto=format&fit=crop&q=80" alt="Travel" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100" onerror="this.src='https://placehold.co/600x450/0f172a/cbd5e1?text=Travel'">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent flex items-end p-3 sm:p-4">
                         <div>
-                            <span class="text-[9px] sm:text-[10px] text-brand-accent uppercase tracking-widest font-bold">Travel</span>
-                            <h5 class="text-xs sm:text-sm font-bold text-slate-100">넓은 세상 탐색</h5>
+                            <span class="text-[9px] sm:text-[10px] text-brand-accent uppercase tracking-widest font-bold" data-lang="gal_i1_badge">Travel</span>
+                            <h5 class="text-xs sm:text-sm font-bold text-slate-100" data-lang="gal_i1_title">넓은 세상 탐색</h5>
                         </div>
                     </div>
                 </div>
                 <!-- Img 2 -->
-                <div class="group relative overflow-hidden rounded-xl bg-slate-800 aspect-[4/3] border border-slate-700">
-                    <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=600&auto=format&fit=crop&q=80" alt="Football" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-70 group-hover:opacity-100">
+                <div class="group relative overflow-hidden rounded-xl bg-slate-800 aspect-[4/3] border border-slate-700 hover:border-emerald-500/50 transition-all duration-300 shadow-md">
+                    <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=600&auto=format&fit=crop&q=80" alt="Football" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100" onerror="this.src='https://placehold.co/600x450/0f172a/cbd5e1?text=Football'">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent flex items-end p-3 sm:p-4">
                         <div>
-                            <span class="text-[9px] sm:text-[10px] text-emerald-400 uppercase tracking-widest font-bold">Football</span>
-                            <h5 class="text-xs sm:text-sm font-bold text-slate-100">그라운드의 열정</h5>
+                            <span class="text-[9px] sm:text-[10px] text-emerald-400 uppercase tracking-widest font-bold" data-lang="gal_i2_badge">Football</span>
+                            <h5 class="text-xs sm:text-sm font-bold text-slate-100" data-lang="gal_i2_title">그라운드의 열정</h5>
                         </div>
                     </div>
                 </div>
                 <!-- Img 3 -->
-                <div class="group relative overflow-hidden rounded-xl bg-slate-800 aspect-[4/3] border border-slate-700">
-                    <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=600&auto=format&fit=crop&q=80" alt="Gym" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-70 group-hover:opacity-100">
+                <div class="group relative overflow-hidden rounded-xl bg-slate-800 aspect-[4/3] border border-slate-700 hover:border-red-500/50 transition-all duration-300 shadow-md">
+                    <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=600&auto=format&fit=crop&q=80" alt="Gym" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100" onerror="this.src='https://placehold.co/600x450/0f172a/cbd5e1?text=Training'">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent flex items-end p-3 sm:p-4">
                         <div>
-                            <span class="text-[9px] sm:text-[10px] text-red-400 uppercase tracking-widest font-bold">Training</span>
-                            <h5 class="text-xs sm:text-sm font-bold text-slate-100">철저한 자기관리</h5>
+                            <span class="text-[9px] sm:text-[10px] text-red-400 uppercase tracking-widest font-bold" data-lang="gal_i3_badge">Training</span>
+                            <h5 class="text-xs sm:text-sm font-bold text-slate-100" data-lang="gal_i3_title">철저한 자기관리</h5>
                         </div>
                     </div>
                 </div>
                 <!-- Img 4 -->
-                <div class="group relative overflow-hidden rounded-xl bg-slate-800 aspect-[4/3] border border-slate-700">
-                    <img src="https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?w=600&auto=format&fit=crop&q=80" alt="Tennis" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-70 group-hover:opacity-100">
+                <div class="group relative overflow-hidden rounded-xl bg-slate-800 aspect-[4/3] border border-slate-700 hover:border-blue-500/50 transition-all duration-300 shadow-md">
+                    <img src="https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?w=600&auto=format&fit=crop&q=80" alt="Tennis" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100" onerror="this.src='https://placehold.co/600x450/0f172a/cbd5e1?text=Tennis'">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent flex items-end p-3 sm:p-4">
                         <div>
-                            <span class="text-[9px] sm:text-[10px] text-blue-400 uppercase tracking-widest font-bold">Tennis</span>
-                            <h5 class="text-xs sm:text-sm font-bold text-slate-100">새로운 스포츠 코트</h5>
+                            <span class="text-[9px] sm:text-[10px] text-blue-400 uppercase tracking-widest font-bold" data-lang="gal_i4_badge">Tennis</span>
+                            <h5 class="text-xs sm:text-sm font-bold text-slate-100" data-lang="gal_i4_title">새로운 스포츠 코트</h5>
                         </div>
                     </div>
                 </div>
                 <!-- Img 5 (Whiskey Bar) -->
-                <div class="group relative overflow-hidden rounded-xl bg-slate-800 aspect-[4/3] border border-slate-700">
-                    <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=600&auto=format&fit=crop&q=80" alt="Whiskey Bar" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-70 group-hover:opacity-100">
+                <div class="group relative overflow-hidden rounded-xl bg-slate-800 aspect-[4/3] border border-slate-700 hover:border-yellow-500/50 transition-all duration-300 shadow-md">
+                    <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=600&auto=format&fit=crop&q=80" alt="Whiskey Bar" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100" onerror="this.src='https://placehold.co/600x450/0f172a/cbd5e1?text=Whiskey+Bar'">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent flex items-end p-3 sm:p-4">
                         <div>
-                            <span class="text-[9px] sm:text-[10px] text-yellow-500 uppercase tracking-widest font-bold">Whiskey</span>
-                            <h5 class="text-xs sm:text-sm font-bold text-slate-100">카발란 한잔, 아늑한 Bar</h5>
+                            <span class="text-[9px] sm:text-[10px] text-yellow-500 uppercase tracking-widest font-bold" data-lang="gal_i5_badge">Whiskey</span>
+                            <h5 class="text-xs sm:text-sm font-bold text-slate-100" data-lang="gal_i5_title">카발란 한잔, 아늑한 Bar</h5>
                         </div>
                     </div>
                 </div>
                 <!-- Img 6 -->
-                <div class="group relative overflow-hidden rounded-xl bg-slate-800 aspect-[4/3] border border-slate-700">
-                    <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&auto=format&fit=crop&q=80" alt="Coffee" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-70 group-hover:opacity-100">
+                <div class="group relative overflow-hidden rounded-xl bg-slate-800 aspect-[4/3] border border-slate-700 hover:border-amber-200/50 transition-all duration-300 shadow-md">
+                    <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&auto=format&fit=crop&q=80" alt="Coffee" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100" onerror="this.src='https://placehold.co/600x450/0f172a/cbd5e1?text=Coffee'">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent flex items-end p-3 sm:p-4">
                         <div>
-                            <span class="text-[9px] sm:text-[10px] text-amber-200 uppercase tracking-widest font-bold">Coffee</span>
-                            <h5 class="text-xs sm:text-sm font-bold text-slate-100">커피의 원두 고유 산미</h5>
+                            <span class="text-[9px] sm:text-[10px] text-amber-200 uppercase tracking-widest font-bold" data-lang="gal_i6_badge">Coffee</span>
+                            <h5 class="text-xs sm:text-sm font-bold text-slate-100" data-lang="gal_i6_title">커피의 원두 고유 산미</h5>
                         </div>
                     </div>
                 </div>
@@ -551,18 +624,16 @@
             <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-brand-accent/10 border border-brand-accent flex items-center justify-center text-brand-accent mx-auto animate-bounce">
                 <i data-lucide="message-square" class="w-6 h-6 sm:w-8 sm:h-8"></i>
             </div>
-            <h2 class="text-2xl sm:text-4xl md:text-5xl font-black text-slate-100 leading-tight px-2">
-                뜨거운 트랙에서 달릴 사람, <br>
-                혹은 고요하게 한 잔을 나눌 분을 찾습니다.
+            <h2 class="text-2xl sm:text-4xl md:text-5xl font-black text-slate-100 leading-tight px-2" data-lang="contact_title">
+                뜨거운 트랙에서 달릴 사람, <br>혹은 고요하게 한 잔을 나눌 분을 찾습니다.
             </h2>
-            <p class="text-slate-400 text-xs sm:text-sm md:text-base max-w-xl mx-auto leading-relaxed px-4">
-                당신의 오늘 하루는 '움직임'에 가깝나요, 혹은 '머무름'에 가깝나요? <br>
-                어떤 라이프스타일이든 상관없습니다. 
+            <p class="text-slate-400 text-xs sm:text-sm md:text-base max-w-xl mx-auto leading-relaxed px-4" data-lang="contact_desc">
+                당신의 오늘 하루는 '움직임'에 가깝나요, 혹은 '머무름'에 가깝나요? <br>어떤 라이프스타일이든 상관없습니다. 가벼운 연락을 기다립니다.
             </p>
             
             <div class="pt-4">
                 <a href="mailto:your-email@example.com" class="inline-flex items-center gap-3 px-6 py-4 sm:px-8 sm:py-5 text-base sm:text-lg font-bold text-slate-950 bg-brand-accent hover:bg-brand-accentHover rounded-xl shadow-2xl shadow-brand-accent/30 transition-all duration-300 transform hover:scale-105">
-                    <span>이메일로 먼저 인사하기</span>
+                    <span data-lang="contact_btn">이메일로 먼저 인사하기</span>
                     <i data-lucide="mail" class="w-5 h-5"></i>
                 </a>
             </div>
@@ -572,7 +643,7 @@
     <!-- 8. Footer -->
     <footer class="py-12 bg-brand-darker border-t border-slate-900 text-slate-500 text-[11px] sm:text-xs text-center">
         <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
-            <span class="tracking-wider">© 2026 Active Explorer. All Rights Reserved.</span>
+            <span class="tracking-wider" id="footer-copyright">© 2026 Active Explorer. All Rights Reserved.</span>
             <div class="flex space-x-6 text-slate-400">
                 <a href="#" class="hover:text-brand-accent transition-colors py-1 px-2" aria-label="Instagram"><i data-lucide="instagram" class="w-4.5 h-4.5"></i></a>
                 <a href="#" class="hover:text-brand-accent transition-colors py-1 px-2" aria-label="Github"><i data-lucide="github" class="w-4.5 h-4.5"></i></a>
@@ -583,14 +654,226 @@
 
     <!-- JavaScript logic -->
     <script>
-        // Initialize Lucide Icons
-        lucide.createIcons();
+        // Language Database Definition
+        const translations = {
+            ko: {
+                brand_title: "EXPLORER.",
+                nav_about: "소개",
+                nav_points: "매력포인트",
+                nav_timeline: "성장여정",
+                nav_taste: "아카이브",
+                nav_gallery: "갤러리",
+                btn_contact: "대화 나누기",
+                hero_badge: "Life in Motion & Stillness",
+                hero_description: "세상을 탐색하는 역동적인 에너지와, 나만의 시간을 채우는 밀도 높은 취향을 가진 탐험가의 기록입니다.",
+                hero_cta: "여정 살펴보기",
+                about_badge: "Active Explorer",
+                about_pic_title: "움직임과 머무름의 기록",
+                about_pic_desc: "유년기 넓은 세계를 향한 탐색에서 시작해, 이제는 나만의 단단한 취향을 수집해나갑니다.",
+                about_small_title: "About Me",
+                about_title: '"경계 없는 확장"과 <br class="hidden sm:block"><span class="text-brand-accent">"밀도 높은 몰입"</span>이라는 두 개의 축',
+                about_desc: "안녕하세요! 저는 새로운 세계를 경험하고 수집하는 일을 사랑하는 사람입니다. 유년기 글로벌한 낯선 공기에서 기른 호기심은 학창 시절 스포츠라는 뜨거운 에너지로 번졌고, 성인이 되어서는 스스로를 통제하는 육체 훈련과 깊이 있는 감각적 사색으로 다듬어졌습니다.",
+                about_quote: '"처음엔 몸으로 부딪쳐 세계를 넓혀갔고, 이제는 한 잔의 위스키, 한 잔의 에스프레소처럼 밀도 높은 순간을 깊이 음미하는 여유를 사랑합니다."',
+                points_small_title: "Core Values",
+                points_title: "나를 정의하는 3가지 키워드",
+                points_desc: "저라는 사람의 생각과 라이프스타일을 이루는 핵심 축들입니다.",
+                points_c1_title: "무한한 에너지 (Active)",
+                points_c1_desc: "축구, 테니스, 권투 등 다양한 역동적인 취미를 섭렵했습니다. 언제나 새로운 도전 앞에서 물러서지 않고 먼저 몸을 던질 줄 아는 능동성을 지니고 있습니다.",
+                points_c2_title: "단단한 끈기 (Disciplined)",
+                points_c2_desc: "군 시절부터 혹독하게 훈련했던 웨이트 트레이닝처럼, 스스로 정한 한계를 돌파하기 위해 하루하루 꾸준히 몸과 마음의 근육을 다듬는 성실함이 있습니다.",
+                points_c3_title: "섬세한 취향 (Refined)",
+                points_c3_desc: "격렬하게 땀 흘린 후 마시는 아늑한 바의 위스키 한 잔, 꼼꼼하게 원두를 로스팅하는 카페에서의 시간을 아낍니다. 일상의 자그마한 디테일에 깊이를 불어넣습니다.",
+                timeline_small_title: "The Odyssey",
+                timeline_title: "어떻게 나의 세계가 확장되어 왔을까?",
+                timeline_desc: "유년기부터 지금까지의 취미 변천사와 가치관의 형성 과정입니다.",
+                time_era_1: "유년기",
+                timeline_i1_title: "낯선 공기, 넓은 세계와의 첫 만남",
+                timeline_i1_desc: "방송국에 근무하셨던 아버지 덕분에 어릴 때부터 여러 나라를 탐험했습니다. 언어와 피부색이 다른 낯선 외국인들과 서슴지 않고 어울렸던 경험은 어린 제게 ‘세상은 무한한 가능성의 공간’이라는 열린 시야를 선물해주었습니다.",
+                time_era_2: "학창 시절",
+                timeline_i2_title: "꿈의 구장을 질주하던 소년",
+                timeline_i2_desc: "맨체스터 유나이티드의 전성기(호날두, 루니, 박지성)를 보며 열광했습니다. 마침내 영국의 올드 트래포드(Old Trafford) 구장을 직접 방문해 동경하던 선수들의 발자취가 남은 꿈의 그라운드를 눈앞에서 마주했을 때의 뜨거운 전율은 지금도 제 마음속 열정의 불꽃입니다.",
+                time_era_3: "청년기 (군대)",
+                timeline_i3_title: "나를 온전히 짓고 단련하는 법 (헬스)",
+                timeline_i3_desc: "군대에서 트레이너 동료들과 자극을 나누며 무아지경으로 쇳덩이를 들었습니다. 소위 '헬창'이라 불릴 만큼 끝까지 나를 혹독하게 밀어붙였던 이 시기는 단단한 마음의 성벽을 다진 시간입니다.",
+                time_era_4: "대학 & 현재",
+                timeline_i4_title: "다채로운 취미의 융합과 음미",
+                timeline_i4_desc: "웨이트 트레이닝 외에도 테니스, 권투 같은 역동적인 종합 스포츠로 신체 균형을 넓혔습니다. 운동 후에는 분위기 있는 바에서 위스키를 마시거나, 훌륭한 카페에서 로스팅 향미를 분석하고, 미술 전시회를 관람하며 감각을 채우는 섬세한 라이프스타일을 사랑하게 되었습니다.",
+                taste_small_title: "Taste Card",
+                taste_title: "현재 나의 라이프스타일 취향 카드",
+                taste_desc: "처음 만났을 때 가벼운 대화의 물꼬를 터줄 대화의 아일랜드입니다.",
+                taste_c1_badge: "Sports / Active",
+                taste_c1_title: "테니스 & 권투",
+                taste_c1_desc: "테니스의 코트를 가르는 경쾌함과 권투의 심장이 터질 것 같은 밀도 높은 스트레스 해소를 함께 즐깁니다.",
+                taste_c1_t1: "순발력", taste_c1_t2: "포핸드", taste_c1_t3: "유산소 끝판왕",
+                taste_c2_badge: "Whiskey / Taste",
+                taste_c2_title: "카발란 한잔 (Kavalan)",
+                taste_c2_desc: "대만의 고온다습한 기후가 빚어낸 농밀한 아열대 과일 향과 짙은 오크의 풍미, 카발란 솔리스트 쉐리를 깊이 음미합니다.",
+                taste_c2_t1: "카발란", taste_c2_t2: "싱글몰트", taste_c2_t3: "쉐리 캐스크",
+                taste_c3_badge: "Coffee / Sensory",
+                taste_c3_title: "스페셜티 드립 커피",
+                taste_c3_desc: "산뜻한 약배전 원두에서 느껴지는 열대과일과 꽃향기에 매료됩니다. 로스터의 장인 정신을 느끼는 것을 환영합니다.",
+                taste_c3_t1: "약배전", taste_c3_t2: "에티오피아", taste_c3_t3: "직접 내리는 아침",
+                taste_c4_badge: "Art / Culture",
+                taste_c4_title: "미술 및 미디어 전시",
+                taste_c4_desc: "공간 전체를 채우는 현대미술이나 몰입형 미디어 아트를 보며 일상의 바쁜 숨을 고르고, 새로운 영감의 스파크를 얻습니다.",
+                taste_c4_t1: "현대미술", taste_c4_t2: "미디어아트", taste_c4_t3: "영감 수집",
+                gallery_small_title: "Visual Diary",
+                gallery_title: "순간의 흔적들",
+                gallery_desc: "기록이 수집되어 삶의 입체를 채워갑니다.",
+                gal_i1_badge: "Travel", gal_i1_title: "넓은 세상 탐색",
+                gal_i2_badge: "Football", gal_i2_title: "그라운드의 열정",
+                gal_i3_badge: "Training", gal_i3_title: "철저한 자기관리",
+                gal_i4_badge: "Tennis", gal_i4_title: "새로운 스포츠 코트",
+                gal_i5_badge: "Whiskey", gal_i5_title: "카발란 한잔, 아늑한 Bar",
+                gal_i6_badge: "Coffee", gal_i6_title: "커피의 원두 고유 산미",
+                contact_title: "뜨거운 트랙에서 달릴 사람, <br>혹은 고요하게 한 잔을 나눌 분을 찾습니다.",
+                contact_desc: "당신의 오늘 하루는 '움직임'에 가깝나요, 혹은 '머무름'에 가깝나요? <br>어떤 라이프스타일이든 상관없습니다. 가벼운 연락을 기다립니다.",
+                contact_btn: "이메일로 먼저 인사하기"
+            },
+            en: {
+                brand_title: "EXPLORER.",
+                nav_about: "About",
+                nav_points: "Key Values",
+                nav_timeline: "Journey",
+                nav_taste: "Archive",
+                nav_gallery: "Gallery",
+                btn_contact: "Let's Chat",
+                hero_badge: "Life in Motion & Stillness",
+                hero_description: "A record of an active explorer who balances dynamic physical energy with deep sensory tastes.",
+                hero_cta: "Explore the Journey",
+                about_badge: "Active Explorer",
+                about_pic_title: "Records of Motion & Stillness",
+                about_pic_desc: "Starting from global exploration in childhood, I now collect my own solid and refined tastes.",
+                about_small_title: "About Me",
+                about_title: 'The Two Pillars of <br class="hidden sm:block">"Limitless Expansion" & <span class="text-brand-accent">"Deep Immersion"</span>',
+                about_desc: "Hello! I am someone who loves exploring and archiving the world. The curiosity I cultivated in the global atmosphere during my childhood turned into sports passion during my school years, and evolved into self-discipline and sensory savoring as an adult.",
+                about_quote: '"At first, I collided with the world physically to broaden my perspective. Now, I cherish the stillness to deeply savor moments, like a glass of Kavalan or espresso."',
+                points_small_title: "Core Values",
+                points_title: "Three Keywords of My Identity",
+                points_desc: "These are the fundamental values shaping my daily life and thoughts.",
+                points_c1_title: "Boundless Energy (Active)",
+                points_c1_desc: "Sailing through soccer, tennis, and boxing. I never hesitate when facing new physical challenges and always throw myself into the field.",
+                points_c2_title: "Resilient Grit (Disciplined)",
+                points_c2_desc: "Just like the weight training routine that I pushed to the limit during military services, I build consistency and inner strength day by day.",
+                points_c3_title: "Refined Taste (Refined)",
+                points_c3_desc: "Enjoying a glass of whiskey at an intimate bar after sweating, or finding roasteries that roast with meticulous care. I add details to life.",
+                timeline_small_title: "The Odyssey",
+                timeline_title: "How My World Has Expanded",
+                timeline_desc: "The transition of my passions and core values from childhood to today.",
+                time_era_1: "Childhood",
+                timeline_i1_title: "New Horizons & Global Discoveries",
+                timeline_i1_desc: "Thanks to my father working in broadcasting, I explored multiple countries from early on. Blending in with diverse cultures gave me an open mind.",
+                time_era_2: "School Years",
+                timeline_i2_title: "The Boy Who Ran on the Dream Turf",
+                timeline_i2_desc: "Enthusiastically watching the golden era of Manchester United. Visiting Old Trafford stadium in person was a defining moment of pure passion.",
+                time_era_3: "Military Days",
+                timeline_i3_title: "Crafting Self-discipline through Lifting",
+                timeline_i3_desc: "Surrounded by trainer peers in the army, I dived into heavy lifting. It wasn't just about building muscles; it built a solid mental wall.",
+                time_era_4: "College & Now",
+                timeline_i4_title: "Fusion of Multi-faceted Tastes",
+                timeline_i4_desc: "Expanded into tennis and boxing for sports. Afterwards, I savor single malts, analyze hand-drip roasting notes, and collect art museum inspirations.",
+                taste_small_title: "Taste Card",
+                taste_title: "My Current Lifestyle Index",
+                taste_desc: "An ice-breaking island to start lightweight conversations when we meet.",
+                taste_c1_badge: "Sports / Active",
+                taste_c1_title: "Tennis & Boxing",
+                taste_c1_desc: "I enjoy the swiftness of covering the tennis court and the heart-throbbing stress-relief of a boxing workout.",
+                taste_c1_t1: "Agility", taste_c1_t2: "Forehand", taste_c1_t3: "High Cardio",
+                taste_c2_badge: "Whiskey / Taste",
+                taste_c2_title: "Kavalan Sherry Cask",
+                taste_c2_desc: "Savoring the intense tropical fruits, vanilla, and dark oak layers brought by Taiwan's humid sub-tropical sherry maturation.",
+                taste_c2_t1: "Kavalan", taste_c2_t2: "Single Malt", taste_c2_t3: "Sherry Solist",
+                taste_c3_badge: "Coffee / Sensory",
+                taste_c3_title: "Specialty Hand Drip",
+                taste_c3_desc: "Fascinated by the fruity acidity of light-roasted beans. I cherish visiting artisanal roasteries and brewing my own morning cup.",
+                taste_c3_t1: "Light Roast", taste_c3_t2: "Ethiopian", taste_c3_t3: "Brewing Ritual",
+                taste_c4_badge: "Art / Culture",
+                taste_c4_title: "Modern & Media Art",
+                taste_c4_desc: "Catching contemporary and immersive media art exhibitions to slow down my busy schedule and gather fresh sparks of inspiration.",
+                taste_c4_t1: "Fine Art", taste_c4_t2: "Media Art", taste_c4_t3: "Inspiration",
+                gallery_small_title: "Visual Diary",
+                gallery_title: "Traces of Moments",
+                gallery_desc: "Memories collected to enrich the geometry of life.",
+                gal_i1_badge: "Travel", gal_i1_title: "Exploring the World",
+                gal_i2_badge: "Football", gal_i2_title: "Passion on the Turf",
+                gal_i3_badge: "Training", gal_i3_title: "Perfect Self-Care",
+                gal_i4_badge: "Tennis", gal_i4_title: "Fresh Courts",
+                gal_i5_badge: "Whiskey", gal_i5_title: "Kavalan at Cozy Bar",
+                gal_i6_badge: "Coffee", gal_i6_title: "Unraveling Flavor Notes",
+                contact_title: "Looking for partners to run on the track, <br>or share a quiet glass of malt.",
+                contact_desc: "Is your day today closer to 'Motion' or 'Stillness'? <br>Any lifestyle is welcome. Looking forward to hearing from you.",
+                contact_btn: "Say Hello via Email"
+            }
+        };
+
+        let currentLang = localStorage.getItem('language') || 'ko';
+
+        function updateLanguage() {
+            const currentData = translations[currentLang];
+            document.querySelectorAll('[data-lang]').forEach(element => {
+                const key = element.getAttribute('data-lang');
+                if (currentData[key]) {
+                    element.innerHTML = currentData[key];
+                }
+            });
+            document.getElementById('lang-text').innerText = currentLang === 'ko' ? 'EN' : 'KO';
+            localStorage.setItem('language', currentLang);
+        }
+
+        document.getElementById('lang-toggle').addEventListener('click', () => {
+            currentLang = currentLang === 'ko' ? 'en' : 'ko';
+            updateLanguage();
+            // Trigger dynamic title text update if needed
+            updateTitleTexts();
+        });
+
+        // Dynamic Title Changing Arrays
+        const titlePairs = {
+            ko: [
+                { motion: "뜨겁게 달리고,", stillness: "깊게 음미합니다." },
+                { motion: "한계를 단련하고,", stillness: "일상을 수집합니다." },
+                { motion: "세계를 탐험하고,", stillness: "순간에 머뭅니다." }
+            ],
+            en: [
+                { motion: "Run Passionately,", stillness: "Savor Deeply." },
+                { motion: "Push the Limits,", stillness: "Archive Daily Life." },
+                { motion: "Explore the World,", stillness: "Savor the Moments." }
+            ]
+        };
+
+        let titleIndex = 0;
+        const motionEl = document.getElementById('hero-title-motion');
+        const stillnessEl = document.getElementById('hero-title-stillness');
+
+        function updateTitleTexts() {
+            const pairs = titlePairs[currentLang];
+            const currentPair = pairs[titleIndex];
+            
+            motionEl.classList.remove('active');
+            stillnessEl.classList.remove('active');
+            
+            setTimeout(() => {
+                motionEl.innerHTML = currentPair.motion;
+                stillnessEl.innerHTML = currentPair.stillness;
+                motionEl.classList.add('active');
+                stillnessEl.classList.add('active');
+            }, 500);
+        }
+
+        // Auto change slogan text every 4 seconds
+        setInterval(() => {
+            const pairs = titlePairs[currentLang];
+            titleIndex = (titleIndex + 1) % pairs.length;
+            updateTitleTexts();
+        }, 4000);
+
+        // Initial launch
+        updateLanguage();
 
         // 1. Theme Toggle Logic (Light / Dark Mode)
         const themeToggleBtn = document.getElementById('theme-toggle');
         const themeIconContainer = document.getElementById('theme-icon-container');
 
-        // Check stored theme preference on load
         const savedTheme = localStorage.getItem('theme') || 'dark';
         if (savedTheme === 'light') {
             document.documentElement.classList.add('light');
@@ -601,7 +884,6 @@
         }
         lucide.createIcons();
 
-        // Toggle theme button event listener
         themeToggleBtn.addEventListener('click', () => {
             const isLight = document.documentElement.classList.contains('light');
             if (isLight) {
@@ -613,11 +895,29 @@
                 localStorage.setItem('theme', 'light');
                 themeIconContainer.innerHTML = '<i data-lucide="moon" class="w-5 h-5"></i>';
             }
-            // Re-render new Lucide Icon structure
             lucide.createIcons();
         });
 
-        // 2. Mobile Menu Open / Close Drawer Logic
+        // 2. Interactive Mouse Parallax for Hero Glow Blurs
+        const heroSection = document.getElementById('hero');
+        const glow1 = document.getElementById('glow-1');
+        const glow2 = document.getElementById('glow-2');
+
+        heroSection.addEventListener('mousemove', (e) => {
+            const { clientX, clientY } = e;
+            const xOffset = (clientX - window.innerWidth / 2) * 0.05;
+            const yOffset = (clientY - window.innerHeight / 2) * 0.05;
+
+            glow1.style.transform = `translate(${xOffset}px, ${yOffset}px) scale(1.05)`;
+            glow2.style.transform = `translate(${-xOffset}px, ${-yOffset}px) scale(0.95)`;
+        });
+
+        heroSection.addEventListener('mouseleave', () => {
+            glow1.style.transform = '';
+            glow2.style.transform = '';
+        });
+
+        // 3. Mobile Menu Logic
         const menuBtn = document.getElementById('menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
         const mobileLinks = document.querySelectorAll('.mobile-link');
@@ -646,45 +946,41 @@
             lucide.createIcons();
         }
 
-        // Close menu when clicking link
         mobileLinks.forEach(link => {
             link.addEventListener('click', () => {
                 closeMenu();
             });
         });
 
-        // Close menu when clicking outside of the header area
         document.addEventListener('click', (e) => {
             if (!mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) {
                 closeMenu();
             }
         });
 
-        // 3. Interactive Filtering for Taste Card Section
+        // 4. Interactive Filtering for Taste Card Section
         function filterTaste(category) {
             const items = document.querySelectorAll('.taste-item');
             const tabs = document.querySelectorAll('.taste-tab');
             
-            // Toggle active styles on tabs
             tabs.forEach(tab => {
                 tab.className = "taste-tab px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs font-bold border border-slate-700 text-slate-300 hover:text-white hover:border-slate-500 transition-all duration-300 min-h-[40px]";
             });
 
             const activeTab = document.getElementById('tab-' + category);
             if (activeTab) {
-                activeTab.className = "taste-tab px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs font-bold border transition-all duration-300 bg-brand-accent text-slate-950 border-brand-accent min-h-[40px]";
+                activeTab.className = "taste-tab px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs font-bold border transition-all duration-300 bg-brand-accent text-slate-950 border-brand-accent min-h-[40px] shadow-sm";
             }
 
-            // Filter items with simple fade animation
             items.forEach(item => {
                 item.style.opacity = '0';
-                item.style.transform = 'scale(0.95)';
+                item.style.transform = 'scale(0.95) translateY(10px)';
                 setTimeout(() => {
                     if (category === 'all' || item.classList.contains(category)) {
                         item.style.display = 'block';
                         setTimeout(() => {
                             item.style.opacity = '1';
-                            item.style.transform = 'scale(1)';
+                            item.style.transform = 'scale(1) translateY(0)';
                         }, 50);
                     } else {
                         item.style.display = 'none';
@@ -693,7 +989,7 @@
             });
         }
 
-        // 4. Scroll Reveal Animation Logic (Intersection Observer)
+        // 5. Scroll Reveal & Growing Timeline Progress Line Logic (Intersection Observer)
         const revealElements = document.querySelectorAll('.reveal');
         
         if ('IntersectionObserver' in window) {
@@ -711,7 +1007,6 @@
 
             revealElements.forEach(el => revealObserver.observe(el));
         } else {
-            // Fallback for older browsers
             function checkReveal() {
                 const triggerBottom = window.innerHeight * 0.85;
                 revealElements.forEach(el => {
@@ -724,6 +1019,26 @@
             window.addEventListener('scroll', checkReveal);
             window.addEventListener('load', checkReveal);
         }
+
+        // Scroll linked growing line for Timeline progress
+        const timelineSection = document.getElementById('timeline');
+        const progressBar = document.getElementById('timeline-progress-bar');
+
+        window.addEventListener('scroll', () => {
+            const rect = timelineSection.getBoundingClientRect();
+            const elementHeight = rect.height;
+            const viewHeight = window.innerHeight;
+
+            // Compute how much of the timeline section is scrolled through
+            const progressStart = rect.top - viewHeight / 2;
+            const progressEnd = progressStart + elementHeight;
+
+            let percentage = 0;
+            if (progressStart < 0) {
+                percentage = Math.min(100, Math.max(0, (-progressStart / elementHeight) * 110));
+            }
+            progressBar.style.height = `${percentage}%`;
+        });
     </script>
 </body>
 </html>
